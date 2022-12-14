@@ -1,0 +1,31 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Binaries
+bin/
+dist/
+lib/
+
+# Editors
+*.swp
+.idea/
+.vs/
+.vscode/
+.DS_Store
+
+# Dependency directories
+node_modules/
+
+# Builds
+public/
+
