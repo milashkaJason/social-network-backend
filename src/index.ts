@@ -1,11 +1,13 @@
 import express from 'express';
 import {defaultCount, defaultPage, getPaginatedItems} from "./getPaginatedItems";
+import cors from 'cors';
 const app = express();
 const port = 3001;
 
 const jsonParseMiddleware = express.json();
 
 app.use(jsonParseMiddleware);
+app.use(cors())
 
 
 const db = {
@@ -21,7 +23,7 @@ const db = {
             followed: false
         },
         {
-            name: "Shubert123",
+            name: "Shubert1",
             id: 1,
             photos: {
                 small: null,
@@ -31,7 +33,7 @@ const db = {
             followed: false
         },
         {
-            name: "Shubert123",
+            name: "Shubert12",
             id: 2,
             photos: {
                 small: null,
