@@ -1,18 +1,31 @@
-import { User} from "../types";
+import {User} from "../types";
 import {Request, Response} from 'express';
 import {ObjectId} from "mongodb";
-import {HTTP_STATUSES} from "../statuses";
+import {HTTP_STATUSES} from "../helpers/statuses";
+import {isValidUserId} from "../helpers/isValidUserId";
+import {ProjectionGetProfile} from "../helpers/projections";
+
+type FindedParams = {
+    _id: ObjectId
+}
 
 export const GetProfileById = async (req: Request, res: Response) => {
     const userId = req.params.id;
 
-    if (!ObjectId.isValid(userId)) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({error: {message: `Не валидный ID пользователя`}});
-        return;
+    isValidUserId(userId, res);
+
+    const projection: ProjectionGetProfile = {
+        photos: true,
+        lookingForAJob: true,
+        lookingForAJobDescription: true,
+        fullName: true, contacts: true,
     }
 
-    let user: User = await req.app.locals.users.findOne({_id: new ObjectId(userId)},
-        {photos: true, lookingForAJob: true, lookingForAJobDescription: true, fullName: true, contacts: true})
+    const queryParams: FindedParams = {
+        _id: new ObjectId(userId)
+    }
+
+    const user: User = await req.app.locals.users.findOne({...queryParams}, {projection: projection})
 
     if (!user) {
         res.status(HTTP_STATUSES.NOT_FOUND_404).send({error: {message: `Пользователь не найден`}});

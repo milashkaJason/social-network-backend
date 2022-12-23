@@ -1,6 +1,11 @@
+import { z } from 'zod';
+import {ObjectId} from "mongodb";
+
 export type User = {
-    _id: string,
+    _id: ObjectId,
     name: string,
+    login: string,
+    password: string,
     photos: {
         small: string | null,
         large: string | null
@@ -22,9 +27,28 @@ export type User = {
     }
 }
 
-export interface GetUsersReqQuery {
+export interface GetUsersReqQueryType {
     term?: string;
     friend?: boolean;
     count?: number;
     page?: number;
+}
+
+export const ZGetUsersReqQuery = z.object({
+    term: z.string().optional(),
+    friend: z.boolean().optional(),
+    count: z.number().optional(),
+    page: z.number().optional(),
+});
+
+export const ZRegistrationReqBody = z.object({
+    name: z.string(),
+    password: z.string(),
+    login: z.string(),
+});
+
+export interface RegistrationReqBodyType {
+    name: string,
+    password: string,
+    login: string,
 }

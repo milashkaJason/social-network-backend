@@ -4,23 +4,29 @@ import {queryParser} from 'express-query-parser';
 import {GetUsers} from "./controllers/GetUsers";
 import {MongoClient} from "mongodb";
 import {GetProfileById} from "./controllers/GetProfileById";
+import {Registration} from "./controllers/Registration";
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+const port = process.env.MAIN_PORT;
+const dbUser = process.env.MONGO_INITDB_ROOT_USERNAME;
+const dbPwd = process.env.MONGO_INITDB_ROOT_PASSWORD;
+const dbPort = process.env.MONGO_PORT;
+const dbName = process.env.MONGO_DB_NAME;
+const dbCollection = 'users';
 
 const app = express();
 
-const mongoClient = new MongoClient("mongodb://root:example@mongodb:27017/");
+const mongoClient = new MongoClient(
+    `mongodb://${dbUser}:${dbPwd}@mongodb:${dbPort}/`
+);
 
-const port = 7799;
 
 (async () => {
     try {
         await mongoClient.connect();
-        app.locals.users = mongoClient.db("social-network").collection("users");
-
-        // const User = mongoose.model("User", userScheme);
-        // const user = new User({name: 'Alex', status: 'Hi' })
-        // mongoClient.db("usersdb").collection("users").insertOne(user)
-
-
+        app.locals.users = mongoClient.db(dbName).collection(dbCollection);
         app.listen(port);
         console.log(`Example app listening on port ${port}`);
     }catch(err) {
@@ -46,6 +52,8 @@ app.use(cors())
 app.get('/users', (req, res) => {GetUsers(req, res)})
 
 app.get('/profile/:id', (req, res) => {GetProfileById(req, res)})
+
+app.post('/registration/', (req, res) => {Registration(req, res)})
 
 // app.get('/users/:id', (req, res) => {GetUsersById(req, res)})
 

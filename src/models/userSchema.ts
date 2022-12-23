@@ -5,6 +5,12 @@ export const userScheme = new Schema({
     name: {
         type: String
     },
+    login: {
+        type: String
+    },
+    password: {
+        type: String
+    },
     photos: {
         small: {
             type: String,

@@ -1,7 +1,8 @@
-import {defaultCount, defaultPage} from "../getPaginatedItems";
-import {GetUsersReqQuery, User} from "../types";
+import { GetUsersReqQueryType, ZGetUsersReqQuery} from "../types";
 import {Request, Response} from 'express';
-import {HTTP_STATUSES} from "../statuses";
+import {isValid} from "../helpers/isValid";
+import {getItemsWithLengthAndTotalPages} from "../helpers/getItemsWithLengthAndTotalPages";
+import {ProjectionGetUsers} from "../helpers/projections";
 
 type FindedParams = {
     name?: {
@@ -11,18 +12,11 @@ type FindedParams = {
 }
 
 export const GetUsers = async (req: Request, res: Response) => {
+    const { term, friend, count, page }:GetUsersReqQueryType = req.query as GetUsersReqQueryType;
 
-    let { term, friend, count = defaultCount, page = defaultPage }:GetUsersReqQuery = req.query as GetUsersReqQuery;
+    const isValidArgs = await isValid<GetUsersReqQueryType>({term, friend, count, page}, res, ZGetUsersReqQuery);
 
-    if (!Number.isInteger(count)) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({error: {message: `count - не является числом`}});
-        return;
-    }
-
-    if (typeof friend !== "boolean" && friend !== undefined) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({error: {message: `friend - не является булевым значением`}});
-        return;
-    }
+    if (!isValidArgs) return;
 
     let queryParams: FindedParams = {};
 
@@ -30,19 +24,15 @@ export const GetUsers = async (req: Request, res: Response) => {
         queryParams.name = { '$regex': term };
     }
 
-
-    // TODO zod валидатор
     if (friend !== undefined) {
         queryParams.followed = friend;
     }
 
-    let users: Array<User> = await req.app.locals.users.find({...queryParams},
-        {photos: true, name: true, followed: true, status: true}
-        ).skip(page * count - count).limit(count).toArray();
+    const projection: ProjectionGetUsers = {photos: true, name: true, followed: true, status: true};
 
-    // TODO поправить длину
-    const userLength = await req.app.locals.users.count();
+    const {items, length, totalPages} = await getItemsWithLengthAndTotalPages<ProjectionGetUsers, FindedParams>(
+        {projection, queryParams, page, count, req});
 
-    const data = {items: users, totalCount: userLength, error: null, totalPages: Math.ceil(userLength / count)}
+    const data = {items: items, totalCount: length, error: null, totalPages: totalPages}
     res.json(data);
 }
