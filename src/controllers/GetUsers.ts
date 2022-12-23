@@ -30,6 +30,8 @@ export const GetUsers = async (req: Request, res: Response) => {
         queryParams.name = { '$regex': term };
     }
 
+
+    // TODO zod валидатор
     if (friend !== undefined) {
         queryParams.followed = friend;
     }
@@ -38,6 +40,7 @@ export const GetUsers = async (req: Request, res: Response) => {
         {photos: true, name: true, followed: true, status: true}
         ).skip(page * count - count).limit(count).toArray();
 
+    // TODO поправить длину
     const userLength = await req.app.locals.users.count();
 
     const data = {items: users, totalCount: userLength, error: null, totalPages: Math.ceil(userLength / count)}

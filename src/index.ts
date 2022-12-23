@@ -6,13 +6,15 @@ import {MongoClient} from "mongodb";
 import {GetProfileById} from "./controllers/GetProfileById";
 
 const app = express();
-const mongoClient = new MongoClient("mongodb://127.0.0.1:27017/");
-const port = 3003;
+
+const mongoClient = new MongoClient("mongodb://root:example@mongodb:27017/");
+
+const port = 7799;
 
 (async () => {
     try {
         await mongoClient.connect();
-        app.locals.users = mongoClient.db("usersdb").collection("users");
+        app.locals.users = mongoClient.db("social-network").collection("users");
 
         // const User = mongoose.model("User", userScheme);
         // const user = new User({name: 'Alex', status: 'Hi' })

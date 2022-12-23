@@ -6,9 +6,8 @@
   "author": "Alex Vagulis",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --inspect ./dist/index.js",
-    "watch": "tsc -w",
-    "start:dev": "yarn dev && yarn watch"
+    "dev": "nodemon",
+    "build": "tsc"
   },
   "dependencies": {
     "cors": "^2.8.5",

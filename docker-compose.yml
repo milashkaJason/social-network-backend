@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./
+    container_name: social-network-backend
+    ports:
+      - 7799:7799
+    restart: unless-stopped
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm run dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./src:/usr/src/app/src
+  mongodb:
+    container_name: mongodb
+    image: mongo:5.0.5
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./init-mongodb:/docker-entrypoint-initdb.d
+      - ./init-mongodb/data:/tmp/data
+    ports:
+      - 27019:27017
