@@ -17,3 +17,8 @@ export type ProjectionRegistration = {
     name: true;
     login: true;
 }
+
+export type ProjectionGetAuthMe = {
+    email: true,
+    login: true
+}

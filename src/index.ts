@@ -6,6 +6,7 @@ import {MongoClient} from "mongodb";
 import {GetProfileById} from "./controllers/GetProfileById";
 import {Registration} from "./controllers/Registration";
 import * as dotenv from 'dotenv';
+import {GetAuthMe} from "./controllers/GetAuthMe";
 
 dotenv.config();
 
@@ -54,6 +55,7 @@ app.get('/users', (req, res) => {GetUsers(req, res)})
 app.get('/profile/:id', (req, res) => {GetProfileById(req, res)})
 
 app.post('/registration/', (req, res) => {Registration(req, res)})
+app.get('/auth/me/', (req, res) => {GetAuthMe(req, res)})
 
 // app.get('/users/:id', (req, res) => {GetUsersById(req, res)})
 
