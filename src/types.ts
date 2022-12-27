@@ -6,6 +6,7 @@ export type User = {
     name: string,
     login: string,
     password: string,
+    token: string,
     photos: {
         small: string | null,
         large: string | null
@@ -52,3 +53,15 @@ export interface RegistrationReqBodyType {
     password: string,
     login: string,
 }
+
+export interface PostAuthMeReqBodyType {
+    rememberMe?: boolean,
+    password: string,
+    login: string,
+}
+
+export const ZPostAuthMeReqBody = z.object({
+    rememberMe: z.boolean().optional(),
+    password: z.string(),
+    login: z.string(),
+});

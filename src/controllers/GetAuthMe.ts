@@ -4,17 +4,17 @@ import {
     User,
 } from "../types";
 import {ProjectionGetAuthMe} from "../helpers/projections";
-import {isValidUserId} from "../helpers/isValidUserId";
-import {ObjectId} from "mongodb";
 
 type FindedParams = {
-    _id: ObjectId
+    token: string
 }
 
 export const GetAuthMe = async (req: Request, res: Response) => {
-    const userId = '63a475ea8070f55d73bdb933';
+    const token = req.headers.authorization
 
-    isValidUserId(userId, res);
+    if (!token) {
+        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).json({error: {message: `Нет токена`}});
+    }
 
     const projection: ProjectionGetAuthMe = {
         email: true,
@@ -22,14 +22,13 @@ export const GetAuthMe = async (req: Request, res: Response) => {
     }
 
     const queryParams: FindedParams = {
-        _id: new ObjectId(userId)
+        token: token.split(' ')[1]
     }
 
     const user: User = await req.app.locals.users.findOne({...queryParams}, {projection: projection})
 
     if (!user) {
-        res.status(HTTP_STATUSES.NOT_FOUND_404).send({error: {message: `Пользователь не найден`}});
-        return;
+        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).json({error: {message: `Не авторизован`}});
     }
 
     res.json({data: user, resultCode: 0, messages: [],});

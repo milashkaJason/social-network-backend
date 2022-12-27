@@ -8,6 +8,9 @@ export const userScheme = new Schema({
     login: {
         type: String
     },
+    token: {
+        type: String
+    },
     password: {
         type: String
     },

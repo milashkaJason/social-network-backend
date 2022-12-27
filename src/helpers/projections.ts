@@ -22,3 +22,7 @@ export type ProjectionGetAuthMe = {
     email: true,
     login: true
 }
+
+export type ProjectionPostAuthMe = {
+    token: true,
+}
