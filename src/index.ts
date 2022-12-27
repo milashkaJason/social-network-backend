@@ -8,6 +8,9 @@ import {Registration} from "./controllers/Registration";
 import * as dotenv from 'dotenv';
 import {GetAuthMe} from "./controllers/GetAuthMe";
 import {PostAuthLogin} from "./controllers/PostAuthLogin";
+import {GetFollow} from "./controllers/GetFollow";
+import {PostFollow} from "./controllers/PostFollow";
+import {DeleteFollow} from "./controllers/DeleteFollow";
 
 dotenv.config();
 
@@ -60,6 +63,12 @@ app.post('/registration/', (req, res) => {Registration(req, res)})
 app.get('/auth/me/', (req, res) => {GetAuthMe(req, res)})
 
 app.post('/auth/login/', (req, res) => {PostAuthLogin(req, res)})
+
+app.get('/follow/:id', (req, res) => {GetFollow(req, res)})
+
+app.post('/follow/:id', (req, res) => {PostFollow(req, res)})
+
+app.delete('/follow/:id', (req, res) => {DeleteFollow(req, res)})
 
 // app.get('/users/:id', (req, res) => {GetUsersById(req, res)})
 
