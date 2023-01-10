@@ -70,14 +70,6 @@ app.post('/follow/:id', (req, res) => {PostFollow(req, res)})
 
 app.delete('/follow/:id', (req, res) => {DeleteFollow(req, res)})
 
-// app.get('/users/:id', (req, res) => {GetUsersById(req, res)})
-
-// app.post('/users/', (req, res) => {PostUsers(req, res)})
-
-// app.delete('/users/:id', (req, res) => {DeleteUsersById(req, res)})
-
-// app.put('/users/:id', (req, res) => {PutUserById(req, res)})
-
 process.on("SIGINT", async() => {
 
     await mongoClient.close();

@@ -1,3 +1,11 @@
+Можно зарегистрироваться или зайти из под юзера ```test``` ```123123```
+
+registration POST ```{
+"login": "test",
+"password": "123123",
+"name": "name"
+}```
+
 
 ###Чтобы запустить проект `docker-compose up -d`
 

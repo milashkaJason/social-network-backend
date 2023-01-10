@@ -11,6 +11,7 @@ export type User = {
         small: string | null,
         large: string | null
     },
+    memberships: [ObjectId]
     status?: string | null,
     followed: boolean,
     lookingForAJob: boolean,

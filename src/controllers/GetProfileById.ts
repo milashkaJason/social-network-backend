@@ -12,7 +12,11 @@ type FindedParams = {
 export const GetProfileById = async (req: Request, res: Response) => {
     const userId = req.params.id;
 
-    isValidUserId(userId, res);
+    const isValidArgs = await isValidUserId(userId, res);
+
+    if (!isValidArgs) {
+        return
+    }
 
     const projection: ProjectionGetProfile = {
         photos: true,

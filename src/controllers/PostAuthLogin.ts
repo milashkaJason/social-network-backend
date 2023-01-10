@@ -30,7 +30,7 @@ export const PostAuthLogin = async (req: Request, res: Response) => {
 
     if (user && user.password === hashedPassword) {
         const token = jwt.sign({
-            data: 'foobar'
+            data: user.login
         }, 'secret');
 
         req.app.locals.users.updateOne({login : login}, {$set: {token : token}});
