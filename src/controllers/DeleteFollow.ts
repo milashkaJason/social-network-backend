@@ -10,23 +10,18 @@ type FindedParams = {
 
 export const DeleteFollow = async (req: Request, res: Response) => {
     const userId = req.params.id;
+    const token = req.headers.authorization
     const isValidArgs = await isValidUserId(userId, res);
 
     if (!isValidArgs) {
         return
     }
 
-    const token = req.headers.authorization
-
     if (!token) {
-        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).json({error: {message: `Нет токена`}});
+        return null;
     }
 
     const user: User = await req.app.locals.users.findOne({ token: token.split(' ')[1] }, { projection: {memberships: true} });
-
-    if (!user) {
-        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).json({error: {message: `Не авторизован`}});
-    }
 
     const queryParams: FindedParams = {
         _id: new ObjectId(userId)

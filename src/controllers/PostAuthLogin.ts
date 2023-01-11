@@ -33,7 +33,7 @@ export const PostAuthLogin = async (req: Request, res: Response) => {
             data: user.login
         }, 'secret');
 
-        req.app.locals.users.updateOne({login : login}, {$set: {token : token}});
+        await req.app.locals.users.updateOne({login : login}, {$set: {token : token}});
         const newUser: User = await req.app.locals.users.findOne({login: login}, {projection: projection});
 
         res.status(HTTP_STATUSES.OK_200).json({

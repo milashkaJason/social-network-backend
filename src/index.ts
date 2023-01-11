@@ -11,6 +11,8 @@ import {PostAuthLogin} from "./controllers/PostAuthLogin";
 import {GetFollow} from "./controllers/GetFollow";
 import {PostFollow} from "./controllers/PostFollow";
 import {DeleteFollow} from "./controllers/DeleteFollow";
+import * as fs from "fs";
+import {Auth} from "./controllers/Auth";
 
 dotenv.config();
 
@@ -51,7 +53,19 @@ app.use(
         parseNumber: true
     })
 )
-app.use(cors())
+app.use(cors());
+
+app.use(function(request, response, next){
+
+    let now = new Date();
+    let hour = now.getHours();
+    let minutes = now.getMinutes();
+    let seconds = now.getSeconds();
+    let data = `${hour}:${minutes}:${seconds} ${request.method} ${request.url} ${request.get("user-agent")}`;
+    console.log(data);
+    fs.appendFile("server.log", data + "\n",(function() {}));
+    next();
+});
 
 
 app.get('/users', (req, res) => {GetUsers(req, res)})
@@ -60,15 +74,15 @@ app.get('/profile/:id', (req, res) => {GetProfileById(req, res)})
 
 app.post('/registration/', (req, res) => {Registration(req, res)})
 
-app.get('/auth/me/', (req, res) => {GetAuthMe(req, res)})
+app.get('/auth/me/', Auth, (req, res) => {GetAuthMe(req, res)})
 
 app.post('/auth/login/', (req, res) => {PostAuthLogin(req, res)})
 
-app.get('/follow/:id', (req, res) => {GetFollow(req, res)})
+app.get('/follow/:id', Auth, (req, res) => {GetFollow(req, res)})
 
-app.post('/follow/:id', (req, res) => {PostFollow(req, res)})
+app.post('/follow/:id', Auth, (req, res) => {PostFollow(req, res)})
 
-app.delete('/follow/:id', (req, res) => {DeleteFollow(req, res)})
+app.delete('/follow/:id', Auth, (req, res) => {DeleteFollow(req, res)})
 
 process.on("SIGINT", async() => {
 
