@@ -66,3 +66,11 @@ export const ZPostAuthMeReqBody = z.object({
     password: z.string(),
     login: z.string(),
 });
+
+export interface PutStatusReqBodyType {
+    status: string,
+}
+
+export const ZPutStatusReqBody = z.object({
+    status: z.string(),
+});

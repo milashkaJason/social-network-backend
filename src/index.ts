@@ -13,6 +13,8 @@ import {PostFollow} from "./controllers/PostFollow";
 import {DeleteFollow} from "./controllers/DeleteFollow";
 import * as fs from "fs";
 import {Auth} from "./controllers/Auth";
+import {GetStatusById} from "./controllers/GetStatusById";
+import {PutStatus} from "./controllers/PutStatus";
 
 dotenv.config();
 
@@ -71,6 +73,10 @@ app.use(function(request, response, next){
 app.get('/users', (req, res) => {GetUsers(req, res)})
 
 app.get('/profile/:id', (req, res) => {GetProfileById(req, res)})
+
+app.get('/profile/status/:id', (req, res) => {GetStatusById(req, res)})
+
+app.put('/profile/status/', Auth, (req, res) => {PutStatus(req, res)})
 
 app.post('/registration/', (req, res) => {Registration(req, res)})
 

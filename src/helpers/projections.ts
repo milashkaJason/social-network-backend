@@ -26,3 +26,7 @@ export type ProjectionGetAuthMe = {
 export type ProjectionPostAuthMe = {
     token: true,
 }
+
+export type ProjectionGetStatusById = {
+    status: true,
+}
