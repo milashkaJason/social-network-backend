@@ -72,5 +72,5 @@ export interface PutStatusReqBodyType {
 }
 
 export const ZPutStatusReqBody = z.object({
-    status: z.string(),
+    status: z.string({invalid_type_error: 'Должна быть строка'}).max(300),
 });
