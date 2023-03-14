@@ -22,7 +22,22 @@ export const Registration = async (req: Request, res: Response) => {
     const hasEqual: boolean = !!await req.app.locals.users.findOne({login: login});
 
     if (hasEqual) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({error: {messages: [`Пользователь с данным логином уже существует`]}});
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
+            resultCode: 1,
+            errors:
+                {
+                    success: false,
+                    error: {
+                        issues: [
+                            {
+                                "message": `Пользователь с данным логином уже существует`
+                            }
+                        ],
+                        name: "serverError"
+                    }
+                },
+            data: {}
+        });
         return;
     }
 
@@ -41,5 +56,9 @@ export const Registration = async (req: Request, res: Response) => {
 
     const createdUser: User = await req.app.locals.users.findOne({login: req.body.login}, {projection: projection});
 
-    res.status(HTTP_STATUSES.CREATED_201).json(createdUser)
+    res.status(HTTP_STATUSES.CREATED_201).json({
+        resultCode: 0,
+        errors: null,
+        data: createdUser,
+    })
 }

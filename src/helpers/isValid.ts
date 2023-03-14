@@ -8,13 +8,11 @@ export const isValid = async <T>(obj: T, res: Response, zodObj: any) => {
         return true;
     }
 
-    res.status(HTTP_STATUSES.BAD_REQUEST_400).send(
-        {
+    res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
             resultCode: 1,
-            messages: parsedObj,
+            errors: parsedObj,
             data: {}
-        }
-        );
+        });
 
     return false
 }

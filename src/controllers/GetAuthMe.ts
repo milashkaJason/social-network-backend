@@ -26,5 +26,9 @@ export const GetAuthMe = async (req: Request, res: Response) => {
 
     const user: User = await req.app.locals.users.findOne({...queryParams}, {projection: projection})
 
-    res.json({data: user, resultCode: 0, messages: [],});
+    res.json({
+        resultCode: 0,
+        errors: null,
+        data: user,
+    });
 }

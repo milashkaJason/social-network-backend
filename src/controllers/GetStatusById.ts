@@ -29,9 +29,28 @@ export const GetStatusById = async (req: Request, res: Response) => {
     const user: User = await req.app.locals.users.findOne({...queryParams}, {projection: projection})
 
     if (!user) {
-        res.status(HTTP_STATUSES.NOT_FOUND_404).send({error: {messages: [`Пользователь не найден`]}});
+        res.status(HTTP_STATUSES.NOT_FOUND_404).send({
+            resultCode: 1,
+            errors:
+                {
+                    success: false,
+                    error: {
+                        issues: [
+                            {
+                                "message": `Пользователь не найден`
+                            }
+                        ],
+                        name: "serverError"
+                    }
+                },
+            data: {}
+        });
         return;
     }
 
-    res.json({status: user.status});
+    res.json({
+        resultCode: 0,
+        errors: null,
+        data: {status: user.status},
+    });
 }

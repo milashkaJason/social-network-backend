@@ -12,7 +12,22 @@ export const Auth = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
     if (!token) {
-        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).json({error: {messages: [`Нет токена`]}});
+        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).json({
+                resultCode: 1,
+                errors:
+                    {
+                        success: false,
+                        error: {
+                            issues: [
+                                {
+                                    "message": `Нет токена`
+                                }
+                            ],
+                            name: "serverError"
+                        }
+                    },
+                data: {}
+            });
     }
 
     const queryParams: FindedParams = {
@@ -24,7 +39,18 @@ export const Auth = async (req: Request, res: Response, next: NextFunction) => {
     if (!user) {
         return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).json({
             resultCode: 1,
-            messages: ['Не авторизован'],
+            errors:
+                {
+                    success: false,
+                    error: {
+                        issues: [
+                            {
+                                "message": `Не авторизован`
+                            }
+                        ],
+                        name: "serverError"
+                    }
+                },
             data: {}
         });
     }

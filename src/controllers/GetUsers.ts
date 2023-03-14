@@ -66,5 +66,9 @@ export const GetUsers = async (req: Request, res: Response) => {
     }
 
     const data = {items: newUsers, totalCount: length, error: null, totalPages: totalPages}
-    res.json(data);
+    res.json({
+        resultCode: 0,
+        errors: null,
+        data: data,
+    });
 }

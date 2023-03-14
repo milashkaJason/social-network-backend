@@ -18,7 +18,7 @@ export const DeleteAuthLogin = async (req: Request, res: Response) => {
 
     res.status(HTTP_STATUSES.OK_200).json({
         resultCode: 0,
-        messages: [],
+        errors: null,
         data: {}
     })
 }

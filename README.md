@@ -12,25 +12,45 @@ registration POST ```{
 
 ## Может быть два вида ошибок
 1. Если ошибка валидации полей
-   ```{
-   "success": false,
-      "error": {
-         "issues": [
-            {
-               "code": "invalid_type",
-               "expected": "string",
-               "received": "number",
-               "path": [
-                  "term"
-               ],
-               "message": "Expected string, received number"
+   ```
+      {
+        data: {},
+        resultCode: 1,
+        errors: {
+            success: false,
+            error: {
+                issues: [
+                    {
+                        code: "invalid_type",
+                        expected: "ObjectId",
+                        received: "any",
+                        path: [
+                            id
+                        ],
+                        "message": "Expected ObjectId, received any"
+                    }
+                ],
+                name: "ZodError"
             }
-         ],
-      "name": "ZodError"
-      }
-   }```
+        },
+    }
+   ```
    
 2. При неуспешном запросе
     ```
-    {error: {messages: [`Пользователь не найден`]}}
+    {
+        data: {},
+        resultCode: 1,
+        errors: {
+            success: false,
+            error: {
+                issues: [
+                    {
+                        "message": "Пользователь не найден"
+                    }
+                ],
+                name: "serverError"
+            }
+        },
+    }
    ```
