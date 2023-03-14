@@ -13,7 +13,7 @@ export const DeleteAuthLogin = async (req: Request, res: Response) => {
             token: token.split(' ')[1]
         }
 
-        req.app.locals.users.updateOne({ ...queryParams }, {$pull: {token: null}});
+        await req.app.locals.users.updateOne({ ...queryParams }, {$set: {token: null}});
     }
 
     res.status(HTTP_STATUSES.OK_200).json({
