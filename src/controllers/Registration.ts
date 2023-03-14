@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import {HTTP_STATUSES} from "../helpers/statuses";
 import {
-    RegistrationReqBodyType,
+    RegistrationReqBodyType, ServerResponse,
     User,
     ZRegistrationReqBody,
 } from "../types";
@@ -10,6 +10,7 @@ import {userScheme} from "../models/userSchema";
 import {isValid} from "../helpers/isValid";
 import {hashPassword} from "../helpers/password";
 import {ProjectionRegistration} from "../helpers/projections";
+import {generateServerErrors} from "../helpers/generateServerErrors";
 
 export const Registration = async (req: Request, res: Response) => {
 
@@ -22,22 +23,13 @@ export const Registration = async (req: Request, res: Response) => {
     const hasEqual: boolean = !!await req.app.locals.users.findOne({login: login});
 
     if (hasEqual) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
+        const response: ServerResponse = {
             resultCode: 1,
-            errors:
-                {
-                    success: false,
-                    error: {
-                        issues: [
-                            {
-                                "message": `Пользователь с данным логином уже существует`
-                            }
-                        ],
-                        name: "serverError"
-                    }
-                },
+            errors: generateServerErrors([`Пользователь с данным логином уже существует`]),
             data: {}
-        });
+        }
+
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send(response);
         return;
     }
 
@@ -56,9 +48,11 @@ export const Registration = async (req: Request, res: Response) => {
 
     const createdUser: User = await req.app.locals.users.findOne({login: req.body.login}, {projection: projection});
 
-    res.status(HTTP_STATUSES.CREATED_201).json({
+    const response: ServerResponse = {
         resultCode: 0,
         errors: null,
         data: createdUser,
-    })
+    }
+
+    res.status(HTTP_STATUSES.CREATED_201).json(response)
 }

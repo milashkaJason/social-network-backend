@@ -1,6 +1,36 @@
 import { z } from 'zod';
 import {ObjectId} from "mongodb";
 
+export type ServerResponse = {
+    resultCode: number,
+    errors: ServerErrors | ZodErrors | null,
+    data: Object,
+}
+
+export type ServerErrors = {
+    success: false,
+    error: {
+        issues: Array<{ message: string }>,
+        name: "serverError"
+    }
+}
+
+type ZodErrorObj = {
+    code: string,
+    expected: string,
+    received: string,
+    path: Array<string>,
+    message: string
+}
+
+export type ZodErrors = {
+    success: false,
+    error: {
+        issues: Array<ZodErrorObj>,
+        name: "ZodError"
+    }
+}
+
 export type User = {
     _id: ObjectId,
     name: string,

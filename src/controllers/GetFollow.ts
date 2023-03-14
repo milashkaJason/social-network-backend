@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import {isValidUserId} from "../helpers/isValidUserId";
-import {User} from "../types";
+import {ServerResponse, User} from "../types";
 import {ObjectId} from "mongodb";
 import {HTTP_STATUSES} from "../helpers/statuses";
+import {generateServerErrors} from "../helpers/generateServerErrors";
 
 type FindedParams = {
     _id: ObjectId
@@ -32,31 +33,24 @@ export const GetFollow = async (req: Request, res: Response) => {
         await req.app.locals.users.findOne({...queryParams});
 
     if (!presumablyFollowedUser) {
-        return res.status(HTTP_STATUSES.NOT_FOUND_404).json({
+        const response: ServerResponse = {
             resultCode: 1,
-            errors:
-                {
-                    success: false,
-                    error: {
-                        issues: [
-                            {
-                                "message": `Пользователя не существует`
-                            }
-                        ],
-                        name: "serverError"
-                    }
-                },
+            errors: generateServerErrors([`Пользователя не существует`]),
             data: {}
-        });
+        }
+
+        return res.status(HTTP_STATUSES.NOT_FOUND_404).json(response);
     }
 
     const isFollowed = !!user.memberships.find((id) => {
         return id.toString() === userId;
     })
 
-    res.json({
+    const response: ServerResponse = {
         resultCode: 0,
         errors: null,
         data: {isFollowed},
-    });
+    }
+
+    res.json(response);
 }

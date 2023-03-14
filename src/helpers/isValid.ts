@@ -1,5 +1,6 @@
 import {Response} from "express";
 import {HTTP_STATUSES} from "./statuses";
+import {ServerResponse} from "../types";
 
 export const isValid = async <T>(obj: T, res: Response, zodObj: any) => {
     const parsedObj = zodObj.safeParse(obj);
@@ -8,11 +9,13 @@ export const isValid = async <T>(obj: T, res: Response, zodObj: any) => {
         return true;
     }
 
-    res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
-            resultCode: 1,
-            errors: parsedObj,
-            data: {}
-        });
+    const response: ServerResponse = {
+        resultCode: 1,
+        errors: parsedObj,
+        data: {}
+    }
+
+    res.status(HTTP_STATUSES.BAD_REQUEST_400).send(response);
 
     return false
 }

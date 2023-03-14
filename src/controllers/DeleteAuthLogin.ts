@@ -1,5 +1,6 @@
 import { Request, Response} from 'express';
 import {HTTP_STATUSES} from "../helpers/statuses";
+import {ServerResponse} from "../types";
 
 type FindedParams = {
     token: string
@@ -16,9 +17,11 @@ export const DeleteAuthLogin = async (req: Request, res: Response) => {
         await req.app.locals.users.updateOne({ ...queryParams }, {$set: {token: null}});
     }
 
-    res.status(HTTP_STATUSES.OK_200).json({
+    const response: ServerResponse = {
         resultCode: 0,
         errors: null,
         data: {}
-    })
+    }
+
+    res.status(HTTP_STATUSES.OK_200).json(response)
 }

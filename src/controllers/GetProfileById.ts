@@ -1,9 +1,10 @@
-import {User} from "../types";
+import {ServerResponse, User} from "../types";
 import {Request, Response} from 'express';
 import {ObjectId} from "mongodb";
 import {HTTP_STATUSES} from "../helpers/statuses";
 import {isValidUserId} from "../helpers/isValidUserId";
 import {ProjectionGetProfile} from "../helpers/projections";
+import {generateServerErrors} from "../helpers/generateServerErrors";
 
 type FindedParams = {
     _id: ObjectId
@@ -32,28 +33,21 @@ export const GetProfileById = async (req: Request, res: Response) => {
     const user: User = await req.app.locals.users.findOne({...queryParams}, {projection: projection})
 
     if (!user) {
-        res.status(HTTP_STATUSES.NOT_FOUND_404).send({
+        const response: ServerResponse = {
             resultCode: 1,
-            errors:
-                {
-                    success: false,
-                    error: {
-                        issues: [
-                            {
-                                "message": `Пользователь не найден`
-                            }
-                        ],
-                        name: "serverError"
-                    }
-                },
+            errors: generateServerErrors([`Пользователь не найден`]),
             data: {}
-        });
+        }
+
+        res.status(HTTP_STATUSES.NOT_FOUND_404).send(response);
         return;
     }
 
-    res.json({
+    const response: ServerResponse = {
         resultCode: 0,
         errors: null,
         data: user,
-    });
+    }
+
+    res.json(response);
 }

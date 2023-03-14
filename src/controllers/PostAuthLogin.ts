@@ -1,10 +1,11 @@
 import {Request, Response} from "express";
-import {PostAuthMeReqBodyType, User, ZPostAuthMeReqBody} from "../types";
+import {PostAuthMeReqBodyType, ServerResponse, User, ZPostAuthMeReqBody} from "../types";
 import {isValid} from "../helpers/isValid";
 import {hashPassword} from "../helpers/password";
 import {HTTP_STATUSES} from "../helpers/statuses";
 import jwt from "jsonwebtoken";
 import {ProjectionPostAuthMe} from "../helpers/projections";
+import {generateServerErrors} from "../helpers/generateServerErrors";
 
 export const PostAuthLogin = async (req: Request, res: Response) => {
     const { rememberMe, login, password } = req.body as PostAuthMeReqBodyType;
@@ -20,22 +21,13 @@ export const PostAuthLogin = async (req: Request, res: Response) => {
 
 
     if (!user) {
-        res.status(HTTP_STATUSES.NOT_FOUND_404).send({
+        const response: ServerResponse = {
             resultCode: 1,
-            errors:
-                {
-                    success: false,
-                    error: {
-                        issues: [
-                            {
-                                "message": `Пользователь с данным логином не существует`
-                            }
-                        ],
-                        name: "serverError"
-                    }
-                },
+            errors: generateServerErrors([`Пользователь с данным логином не существует`]),
             data: {}
-        });
+        }
+
+        res.status(HTTP_STATUSES.NOT_FOUND_404).send(response);
         return;
     }
 
@@ -51,30 +43,23 @@ export const PostAuthLogin = async (req: Request, res: Response) => {
         await req.app.locals.users.updateOne({login : login}, {$set: {token : token}});
         const newUser: User = await req.app.locals.users.findOne({login: login}, {projection: projection});
 
-        res.status(HTTP_STATUSES.OK_200).json({
+        const response: ServerResponse = {
             resultCode: 0,
             errors: null,
             data: {
                 userId: newUser._id,
                 token: newUser.token
             }
-        })
+        }
+
+        res.status(HTTP_STATUSES.OK_200).json(response)
     } else {
-        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).send({
+        const response: ServerResponse = {
             resultCode: 1,
-            errors:
-                {
-                    success: false,
-                    error: {
-                        issues: [
-                            {
-                                "message": `Неправильный пароль`
-                            }
-                        ],
-                        name: "serverError"
-                    }
-                },
+            errors: generateServerErrors([`Неправильный пароль`]),
             data: {}
-        });
+        }
+
+        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).send(response);
     }
 }

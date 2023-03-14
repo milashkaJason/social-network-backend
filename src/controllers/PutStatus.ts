@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import {HTTP_STATUSES} from "../helpers/statuses";
-import {PutStatusReqBodyType, ZPutStatusReqBody} from "../types";
+import {PutStatusReqBodyType, ServerResponse, ZPutStatusReqBody} from "../types";
 import {isValid} from "../helpers/isValid";
 
 type FindedParams = {
@@ -26,9 +26,11 @@ export const PutStatus = async (req: Request, res: Response) => {
 
     await req.app.locals.users.updateOne({...queryParams}, {$set: {status : status}});
 
-    res.status(HTTP_STATUSES.OK_200).json({
+    const response: ServerResponse = {
         resultCode: 0,
         errors: null,
         data: {}
-    })
+    }
+
+    res.status(HTTP_STATUSES.OK_200).json(response)
 }

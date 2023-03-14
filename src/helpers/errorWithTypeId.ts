@@ -1,4 +1,6 @@
-export const errorWithTypeId = (id: string) => {
+import {ServerResponse} from "../types";
+
+export const errorWithTypeId = (id: string): ServerResponse => {
     return {
         resultCode: 0,
         errors: {
