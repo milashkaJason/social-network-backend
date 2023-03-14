@@ -32,7 +32,7 @@ export const GetFollow = async (req: Request, res: Response) => {
         await req.app.locals.users.findOne({...queryParams});
 
     if (!presumablyFollowedUser) {
-        return res.status(HTTP_STATUSES.NOT_FOUND_404).json({error: {message: `Пользователя не существует`}});
+        return res.status(HTTP_STATUSES.NOT_FOUND_404).json({error: {messages: [`Пользователя не существует`]}});
     }
 
     const isFollowed = !!user.memberships.find((id) => {

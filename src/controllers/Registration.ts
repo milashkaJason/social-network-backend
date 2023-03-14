@@ -22,7 +22,7 @@ export const Registration = async (req: Request, res: Response) => {
     const hasEqual: boolean = !!await req.app.locals.users.findOne({login: login});
 
     if (hasEqual) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({error: {message: `Пользователь с данным логином уже существует`}});
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({error: {messages: [`Пользователь с данным логином уже существует`]}});
         return;
     }
 

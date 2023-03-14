@@ -31,7 +31,7 @@ export const DeleteFollow = async (req: Request, res: Response) => {
         await req.app.locals.users.findOne({...queryParams});
 
     if (!presumablyFollowedUser) {
-        return res.status(HTTP_STATUSES.NOT_FOUND_404).json({error: {message: `Пользователя не существует`}});
+        return res.status(HTTP_STATUSES.NOT_FOUND_404).json({error: {messages: [`Пользователя не существует`]}});
     }
 
     const isFollowed = !!user.memberships.find((id) => {
@@ -40,7 +40,7 @@ export const DeleteFollow = async (req: Request, res: Response) => {
 
 
     if (!isFollowed) {
-        return res.status(HTTP_STATUSES.BAD_REQUEST_400).json({error: {message: `Пользователь не является подписчиком`}});
+        return res.status(HTTP_STATUSES.BAD_REQUEST_400).json({error: {messages: [`Пользователь не является подписчиком`]}});
     }
 
     req.app.locals.users.updateOne({ token: token.split(' ')[1] }, {$pull: {memberships: new ObjectId(userId)

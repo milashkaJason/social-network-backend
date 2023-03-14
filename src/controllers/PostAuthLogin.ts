@@ -20,7 +20,7 @@ export const PostAuthLogin = async (req: Request, res: Response) => {
 
 
     if (!user) {
-        res.status(HTTP_STATUSES.NOT_FOUND_404).send({error: {message: `Пользователь с данным логином не существует`}});
+        res.status(HTTP_STATUSES.NOT_FOUND_404).send({error: {messages: [`Пользователь с данным логином не существует`]}});
         return;
     }
 
@@ -45,6 +45,6 @@ export const PostAuthLogin = async (req: Request, res: Response) => {
             }
         })
     } else {
-        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).send({error: {message: `Неправильный пароль`}});
+        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).send({error: {messages: [`Неправильный пароль`]}});
     }
 }

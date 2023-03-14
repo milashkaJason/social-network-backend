@@ -31,7 +31,7 @@ export const PostFollow = async (req: Request, res: Response) => {
         await req.app.locals.users.findOne({...queryParams});
 
     if (!presumablyFollowedUser) {
-        return res.status(HTTP_STATUSES.NOT_FOUND_404).json({error: {message: `Пользователя не существует`}});
+        return res.status(HTTP_STATUSES.NOT_FOUND_404).json({error: {messages: [`Пользователя не существует`]}});
     }
 
     const isFollowed = !!user.memberships.find((id) => {
@@ -39,7 +39,7 @@ export const PostFollow = async (req: Request, res: Response) => {
     })
 
     if (isFollowed) {
-        return res.status(HTTP_STATUSES.BAD_REQUEST_400).json({error: {message: `Пользователь уже является подписчиком`}});
+        return res.status(HTTP_STATUSES.BAD_REQUEST_400).json({error: {messages: [`Пользователь уже является подписчиком`]}});
     }
 
     req.app.locals.users.updateOne({ token: token.split(' ')[1] }, {$push: {memberships: new ObjectId(userId) }});
