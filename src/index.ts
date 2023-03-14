@@ -15,6 +15,7 @@ import * as fs from "fs";
 import {Auth} from "./controllers/Auth";
 import {GetStatusById} from "./controllers/GetStatusById";
 import {PutStatus} from "./controllers/PutStatus";
+import {DeleteAuthLogin} from "./controllers/DeleteAuthLogin";
 
 dotenv.config();
 
@@ -83,6 +84,8 @@ app.post('/registration/', (req, res) => {Registration(req, res)})
 app.get('/auth/me/', Auth, (req, res) => {GetAuthMe(req, res)})
 
 app.post('/auth/login/', (req, res) => {PostAuthLogin(req, res)})
+
+app.delete('/auth/login/', Auth, (req, res) => {DeleteAuthLogin(req, res)})
 
 app.get('/follow/:id', Auth, (req, res) => {GetFollow(req, res)})
 

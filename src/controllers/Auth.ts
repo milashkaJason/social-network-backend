@@ -22,7 +22,11 @@ export const Auth = async (req: Request, res: Response, next: NextFunction) => {
     const user: User = await req.app.locals.users.findOne({...queryParams})
 
     if (!user) {
-        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).json({error: {message: `Не авторизован`}});
+        return res.status(HTTP_STATUSES.NE_CREDENTIALS_403).json({
+            resultCode: 1,
+            messages: ['Не авторизован'],
+            data: {}
+        });
     }
 
     next();
