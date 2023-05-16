@@ -104,3 +104,35 @@ export interface PutStatusReqBodyType {
 export const ZPutStatusReqBody = z.object({
     status: z.string().max(300).min(1),
 });
+
+export interface PutProfileReqBodyType {
+    lookingForAJob: boolean,
+    lookingForAJobDescription: string,
+    fullName: string,
+    contacts: {
+        github: string,
+        vk: string,
+        facebook: string,
+        instagram: string,
+        twitter: string,
+        website: string,
+        youtube: string,
+        mainLink: string,
+    }
+}
+
+export const ZPutProfileReqBodyType = z.object({
+    lookingForAJob: z.boolean(),
+    lookingForAJobDescription:  z.string().max(300).min(1),
+    fullName:  z.string().max(300).min(1),
+    contacts: z.object({
+        github:  z.string().max(300).min(1),
+        vk:  z.string().max(300).min(1),
+        facebook:  z.string().max(300).min(1),
+        instagram:  z.string().max(300).min(1),
+        twitter:  z.string().max(300).min(1),
+        website:  z.string().max(300).min(1),
+        youtube:  z.string().max(300).min(1),
+        mainLink:  z.string().max(300).min(1),
+    })
+});

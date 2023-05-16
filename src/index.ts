@@ -16,6 +16,10 @@ import {Auth} from "./controllers/Auth";
 import {GetStatusById} from "./controllers/GetStatusById";
 import {PutStatus} from "./controllers/PutStatus";
 import {DeleteAuthLogin} from "./controllers/DeleteAuthLogin";
+import {PutProfile} from "./controllers/PutProfile";
+import {PutPhoto} from "./controllers/PutPhoto";
+import {GetUploads} from "./controllers/GetUploads";
+const fileUpload = require('express-fileupload');
 
 dotenv.config();
 
@@ -47,6 +51,14 @@ const mongoClient = new MongoClient(
 
 const jsonParseMiddleware = express.json();
 
+app.use(
+    fileUpload({
+        limits: {
+            fileSize: 10000000, // Around 10MB
+        },
+        abortOnLimit: true,
+    })
+);
 app.use(jsonParseMiddleware);
 app.use(
     queryParser({
@@ -77,7 +89,13 @@ app.get('/profile/:id', (req, res) => {GetProfileById(req, res)})
 
 app.get('/profile/status/:id', (req, res) => {GetStatusById(req, res)})
 
+app.put('/profile', Auth, (req, res) => {PutProfile(req, res)})
+
 app.put('/profile/status/', Auth, (req, res) => {PutStatus(req, res)})
+
+app.put('/profile/photo/', Auth, (req, res) => {PutPhoto(req, res)})
+
+app.get('/uploads/:photoName', (req, res) => {GetUploads(req, res)})
 
 app.post('/registration/', (req, res) => {Registration(req, res)})
 
