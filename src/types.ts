@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {ObjectId} from "mongodb";
+import {checkIsUrlValid} from "./helpers/checkIsUrlValid";
 
 export type ServerResponse = {
     resultCode: number,
@@ -123,16 +124,16 @@ export interface PutProfileReqBodyType {
 
 export const ZPutProfileReqBodyType = z.object({
     lookingForAJob: z.boolean(),
-    lookingForAJobDescription:  z.string().max(300).min(1),
-    fullName:  z.string().max(300).min(1),
+    lookingForAJobDescription:  z.string().max(300).min(0),
+    fullName:  z.string().max(300).min(0),
     contacts: z.object({
-        github:  z.string().max(300).min(1),
-        vk:  z.string().max(300).min(1),
-        facebook:  z.string().max(300).min(1),
-        instagram:  z.string().max(300).min(1),
-        twitter:  z.string().max(300).min(1),
-        website:  z.string().max(300).min(1),
-        youtube:  z.string().max(300).min(1),
-        mainLink:  z.string().max(300).min(1),
+        github:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of github should by valid'),
+        vk:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of vk should by valid'),
+        facebook:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of facebook should by valid'),
+        instagram:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of instagram should by valid'),
+        twitter:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of twitter should by valid'),
+        website:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of website should by valid'),
+        youtube:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of youtube should by valid'),
+        mainLink:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of mainLink should by valid'),
     })
 });
