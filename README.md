@@ -13,6 +13,7 @@ password: 123123
 ## Registration
 
 POST
+
 ```json
 {
 "login": "test",
@@ -24,7 +25,8 @@ POST
 ## Errors
 
 - on field validation
-```json
+
+```
 {
     data: {},
     resultCode: 1,
@@ -49,7 +51,8 @@ POST
 ```
    
 - failed request
-```json
+
+```
 {
     data: {},
     resultCode: 1,
