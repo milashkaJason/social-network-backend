@@ -90,12 +90,14 @@ export interface PostAuthMeReqBodyType {
     rememberMe?: boolean,
     password: string,
     login: string,
+    recaptchaToken: string,
 }
 
 export const ZPostAuthMeReqBody = z.object({
     rememberMe: z.boolean().optional(),
     password: z.string(),
     login: z.string(),
+    recaptchaToken: z.string(),
 });
 
 export interface PutStatusReqBodyType {
@@ -111,29 +113,29 @@ export interface PutProfileReqBodyType {
     lookingForAJobDescription: string,
     fullName: string,
     contacts: {
-        github: string,
-        vk: string,
-        facebook: string,
-        instagram: string,
-        twitter: string,
-        website: string,
-        youtube: string,
-        mainLink: string,
+        github: string | null,
+        vk: string | null,
+        facebook: string | null,
+        instagram: string | null,
+        twitter: string | null,
+        website: string | null,
+        youtube: string | null,
+        mainLink: string | null,
     }
 }
 
 export const ZPutProfileReqBodyType = z.object({
     lookingForAJob: z.boolean(),
-    lookingForAJobDescription:  z.string().max(300).min(0),
-    fullName:  z.string().max(300).min(0),
+    lookingForAJobDescription:  z.string().max(300).min(1).nullable(),
+    fullName:  z.string().max(300).min(1).nullable(),
     contacts: z.object({
-        github:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of github should by valid'),
-        vk:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of vk should by valid'),
-        facebook:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of facebook should by valid'),
-        instagram:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of instagram should by valid'),
-        twitter:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of twitter should by valid'),
-        website:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of website should by valid'),
-        youtube:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of youtube should by valid'),
-        mainLink:  z.string().max(300).min(0).refine((v) => checkIsUrlValid(v), 'Url of mainLink should by valid'),
+        github:  z.string().max(300).min(1).refine((v) => checkIsUrlValid(v), 'Url of github should by valid').nullable(),
+        vk:  z.string().max(300).min(1).refine((v) => checkIsUrlValid(v), 'Url of vk should by valid').nullable(),
+        facebook:  z.string().max(300).min(1).refine((v) => checkIsUrlValid(v), 'Url of facebook should by valid').nullable(),
+        instagram:  z.string().max(300).min(1).refine((v) => checkIsUrlValid(v), 'Url of instagram should by valid').nullable(),
+        twitter:  z.string().max(300).min(1).refine((v) => checkIsUrlValid(v), 'Url of twitter should by valid').nullable(),
+        website:  z.string().max(300).min(1).refine((v) => checkIsUrlValid(v), 'Url of website should by valid').nullable(),
+        youtube:  z.string().max(300).min(1).refine((v) => checkIsUrlValid(v), 'Url of youtube should by valid').nullable(),
+        mainLink:  z.string().max(300).min(1).refine((v) => checkIsUrlValid(v), 'Url of mainLink should by valid').nullable(),
     })
 });

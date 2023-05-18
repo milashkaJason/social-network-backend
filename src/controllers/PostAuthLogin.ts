@@ -8,9 +8,9 @@ import {ProjectionPostAuthMe} from "../helpers/projections";
 import {generateServerErrors} from "../helpers/generateServerErrors";
 
 export const PostAuthLogin = async (req: Request, res: Response) => {
-    const { rememberMe, login, password } = req.body as PostAuthMeReqBodyType;
+    const { rememberMe, login, password, recaptchaToken } = req.body as PostAuthMeReqBodyType;
 
-    const isValidArgs = await isValid<PostAuthMeReqBodyType>({rememberMe, login, password}, res, ZPostAuthMeReqBody);
+    const isValidArgs = await isValid<PostAuthMeReqBodyType>({rememberMe, login, password, recaptchaToken}, res, ZPostAuthMeReqBody);
 
 
     if (!isValidArgs) return;

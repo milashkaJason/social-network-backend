@@ -19,6 +19,7 @@ import {DeleteAuthLogin} from "./controllers/DeleteAuthLogin";
 import {PutProfile} from "./controllers/PutProfile";
 import {PutPhoto} from "./controllers/PutPhoto";
 import {GetUploads} from "./controllers/GetUploads";
+import {CheckCaptcha} from "./controllers/CheckCaptcha";
 const fileUpload = require('express-fileupload');
 
 dotenv.config();
@@ -101,7 +102,7 @@ app.post('/registration/', (req, res) => {Registration(req, res)})
 
 app.get('/auth/me/', Auth, (req, res) => {GetAuthMe(req, res)})
 
-app.post('/auth/login/', (req, res) => {PostAuthLogin(req, res)})
+app.post('/auth/login/', CheckCaptcha, (req, res) => {PostAuthLogin(req, res)})
 
 app.delete('/auth/login/', Auth, (req, res) => {DeleteAuthLogin(req, res)})
 
